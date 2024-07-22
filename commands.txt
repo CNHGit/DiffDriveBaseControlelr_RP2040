@@ -1,0 +1,13 @@
+These commands can be used over CuteCom to directly pass commands to the RP2040 MCU to control the motors.
+
+Stationary - 1F A8 0B 10 00 00 00 00 00 00 00 00 00 00 01 01 1F A9
+
+Left Expected Minimum - 1F A8 0B 10 00 00 00 00 01 00 00 00 00 00 01 01 1F A9
+
+Right Expected Minimum - 1F A8 0B 10 00 00 00 00 00 00 00 00 00 01 01 01 1F A9
+
+Left actual starting minimum - 1F A8 0B 10 00 00 00 00 00 00 00 00 00 00 01 01 1F A9
+
+Right actual starting minimum - 1F A8 0B 10 00 00 00 00 00 00 00 00 00 0A 01 01 1F A9
+
+Right max vel - 1F A8 0B 10 00 00 00 00 00 00 00 00 05 d4 01 01 1F A9

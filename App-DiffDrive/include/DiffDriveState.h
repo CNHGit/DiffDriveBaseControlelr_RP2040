@@ -11,13 +11,13 @@
 #define WHEEL_RADIUS   95
 #define WHEEL_PERIMETER  2 * 3.14 * WHEEL_RADIUS
 
-#define ENCODER_COUNT_PER_REV 80
+#define ENCODER_COUNT_PER_REV 600
 
 #define RADIANS_PER_COUNT   2*3.14/ ENCODER_COUNT_PER_REV
 #define DISTANCE_PER_COUNT  WHEEL_PERIMETER/ENCODER_COUNT_PER_REV
 
 //MAX RPM ; RPM = ( (V/r) / (2*pi) ) * 60
-#define MAX_RPM_CLAMP 700
+#define MAX_RPM_CLAMP 7000
 
 //MM_PER_SEC
 #define MAX_VEL_CLAMP 7500
@@ -178,7 +178,7 @@ class DiffDriveState{
             if(LastLeftEncoderTickCounter != LeftEncoderTickCounter){
                 double left_ticks_per_second = std::abs(LastLeftEncoderTickCounter - LeftEncoderTickCounter)/executionTime;
                 double left_rev_per_sec  = left_ticks_per_second/ENCODER_COUNT_PER_REV;
-                double temp_left_rpm  = left_rev_per_sec * 60;
+                double temp_left_rpm  = left_rev_per_sec * 60* 0.125;
                 LeftWheelRPM = (unsigned int)(temp_left_rpm > MAX_RPM_CLAMP ? MAX_RPM_CLAMP : temp_left_rpm);
 
                 double tempLeftWheelVelocity = left_ticks_per_second*DISTANCE_PER_COUNT;
@@ -188,7 +188,7 @@ class DiffDriveState{
             if(LastRightEncoderTickCounter != RightEncoderTickCounter){
                 double right_ticks_per_second = std::abs(LastRightEncoderTickCounter - RightEncoderTickCounter)/executionTime;
                 double right_rev_per_sec  = right_ticks_per_second/ENCODER_COUNT_PER_REV;
-                double temp_right_rpm  = right_rev_per_sec * 60;
+                double temp_right_rpm  = right_rev_per_sec * 60 * 0.125;
                 RightWheelRPM = (unsigned int)(temp_right_rpm > MAX_RPM_CLAMP ? MAX_RPM_CLAMP : temp_right_rpm);
 
                 double tempRightWheelVelocity = right_ticks_per_second*DISTANCE_PER_COUNT;
