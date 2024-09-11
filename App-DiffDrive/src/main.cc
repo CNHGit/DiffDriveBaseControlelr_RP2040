@@ -243,7 +243,8 @@ void compute_state_callback(TimerHandle_t timer) {
     // printf("\t %ld Left: %ld",RIGHT_PWM, DiffDriveState::getInstance()->GetLeftEncoderCount());
     // printf("\t %d Right PWM", RIGHT_PWM);
     // printf("\t %d Left PWM", LEFT_PWM);
-    printf("\n Right RPM act: %d, RPM des: %d,Adj: %d, PWM: %d", r_rpm, RIGHT_WHEEL_RPM, adjustment_r, RIGHT_PWM);
+    // printf("\n Right RPM act: %d, RPM des: %d,Adj: %d, PWM: %d", r_rpm, RIGHT_WHEEL_RPM, adjustment_r, RIGHT_PWM);
+    printf("\n%ld %ld",DiffDriveState::getInstance()->GetLeftEncoderCount(), DiffDriveState::getInstance()->GetRightEncoderCount() );
     // printf("\t %d Left RPM", l_rpm);
 
    
