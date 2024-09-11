@@ -2,7 +2,7 @@
  * @brief PID CONTEXT ------------------------------------------------------------------
  */
 // PID Coefficients
-double _kP_l = 0;//0.25;
+double _kP_l = 1;//0.25;
 double _kI_l = 0;//0.006;
 double _kD_l = 0;//0.000000000625;
 
