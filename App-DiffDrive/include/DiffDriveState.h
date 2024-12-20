@@ -17,10 +17,10 @@
 #define DISTANCE_PER_COUNT  WHEEL_PERIMETER/ENCODER_COUNT_PER_REV
 
 //MAX RPM ; RPM = ( (V/r) / (2*pi) ) * 60
-#define MAX_RPM_CLAMP 7000
+#define MAX_RPM_CLAMP 20
 
 //MM_PER_SEC
-#define MAX_VEL_CLAMP 7500
+#define MAX_VEL_CLAMP 7.5
 
 //Radians
 #define MAX_POS_CLAMP 3.14

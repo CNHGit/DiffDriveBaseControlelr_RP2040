@@ -236,7 +236,10 @@ void compute_state_callback(TimerHandle_t timer) {
         one_sec_counter++;
 
     // printf("\n%d %d %d %d %f %f",LEFT_PWM,  RIGHT_PWM, LEFT_WHEEL_VEL, LEFT_WHEEL_RPM, DiffDriveState::getInstance()->GetLeftWheelVelocity(), DiffDriveState::getInstance()->GetLeftWheelRPM() );
-    
+    // double act_l_vel = DiffDriveState::getInstance()->GetLeftWheelVelocity();
+    // double act_r_vel = DiffDriveState::getInstance()->GetRightWheelVelocity();
+
+    // printf("\n Actual, Desired - Left: %ld, %d; -Right: %ld, %d", act_l_vel, LEFT_WHEEL_VEL, act_r_vel, RIGHT_WHEEL_VEL);
 
     //    printf("\n%ld %ld %ld %ld",100, DiffDriveState::getInstance()->GetLeftEncoderCount(), 100, DiffDriveState::getInstance()->GetRightEncoderCount() );
     // printf("\n%ld Right: %ld",LEFT_PWM, DiffDriveState::getInstance()->GetRightEncoderCount());
