@@ -1,11 +1,11 @@
 // Initiate left wheel variables
 
 int error_l;
-double dInput_l;
-int adjustment_l;
+int dInput_l;
+double adjustment_l;
 
 // Initiate right wheel variables
 
 int error_r;
-double dInput_r;
-int adjustment_r;
+int dInput_r;
+double adjustment_r;
