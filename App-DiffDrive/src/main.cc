@@ -161,14 +161,14 @@ void compute_state_callback(TimerHandle_t timer) {
         DiffDriveState::getInstance()->updateWheelPosition();
         DiffDriveState::getInstance()->updateWheelState();
 
-        unsigned int l_rpm = DiffDriveState::getInstance()->GetLeftWheelRPM();
-        unsigned int r_rpm = DiffDriveState::getInstance()->GetRightWheelRPM();
+        uint32_t l_rpm = DiffDriveState::getInstance()->GetLeftWheelRPM();
+        uint32_t r_rpm = DiffDriveState::getInstance()->GetRightWheelRPM();
 
         // Maps (a value of 0 to 1) and (a value of 1 to -1)
         DiffDriveState::getInstance()->SetLeftWheelDirection( (LEFT_WHEEL_DIR * -2)+1 );
         gpio_put(LEFT_DIR_PIN, LEFT_WHEEL_DIR);
 
-        error_l = LEFT_WHEEL_RPM - l_rpm;  // calculate error
+        error_l = int(LEFT_WHEEL_RPM - l_rpm);  // calculate error
         lITerm += (_kI_l * (double)error_l); // calculate integral term
         dInput_l = l_rpm - lLastSpeed; // calculate derivative
         adjustment_l = (_kP_l * (double)error_l) + lITerm - (_kD_l * dInput_l);
@@ -247,6 +247,7 @@ void compute_state_callback(TimerHandle_t timer) {
     // printf("\t %d Right PWM", RIGHT_PWM);
     // printf("\t %d Left PWM", LEFT_PWM);
     // printf("\n Right RPM act: %d, RPM des: %d,Adj: %d, PWM: %d", r_rpm, RIGHT_WHEEL_RPM, adjustment_r, RIGHT_PWM);
+    printf("\n Left RPM act: %d, RPM des: %d,Adj: %lf, PWM: %d, error: %d", l_rpm, LEFT_WHEEL_RPM, adjustment_l, LEFT_PWM, error_l);
     // printf("\n%ld %ld",DiffDriveState::getInstance()->GetLeftEncoderCount(), DiffDriveState::getInstance()->GetRightEncoderCount() );
     // printf("\t %d Left RPM", l_rpm);
 
