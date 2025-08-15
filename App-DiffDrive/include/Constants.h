@@ -22,11 +22,11 @@
 // #define LEFT_ENCODER_PIN 6
 
 
-#define RIGHT_ENCODER_PIN_1 6
-#define RIGHT_ENCODER_PIN_2 7
+#define LEFT_ENCODER_PIN_1 6
+#define LEFT_ENCODER_PIN_2 7
 
-#define LEFT_ENCODER_PIN_1 8
-#define LEFT_ENCODER_PIN_2 9
+#define RIGHT_ENCODER_PIN_1 8
+#define RIGHT_ENCODER_PIN_2 9
 
 //Execution frequency of reading commands and speed control loops
 #define COMPUTE_STATE_RATE 5 //hz
