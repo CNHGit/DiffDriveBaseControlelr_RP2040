@@ -78,15 +78,17 @@ void read_state(std::vector<uint8_t>& frame) {
     RIGHT_WHEEL_VEL = tRIGHT_WHEEL_VEL;
 
     //Converted Wheel RPM
+
+
     double lomega = (LEFT_WHEEL_VEL*1.0) / (WHEEL_RADIUS*1.0);
     double lrps = lomega / (2 * 3.14);
     double lrpm = lrps * 60;
-    LEFT_WHEEL_RPM  = (uint32_t)lrpm;
+    LEFT_WHEEL_RPM  = 100;//(uint32_t)lrpm;
 
     double romega = (RIGHT_WHEEL_VEL*1.0) / (WHEEL_RADIUS*1.0);
     double rrps = romega / (2 * 3.14);
     double rrpm = rrps * 60;
-    RIGHT_WHEEL_RPM  = (uint32_t)rrpm;
+    RIGHT_WHEEL_RPM  = 100;//(uint32_t)rrpm;
 
 }
 

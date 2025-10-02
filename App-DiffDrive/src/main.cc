@@ -80,6 +80,11 @@ void init_gpio() {
     gpio_set_dir(RIGHT_DIR_PIN, GPIO_OUT);
     gpio_put(RIGHT_DIR_PIN, 1);
 
+    // Encoder inputs (A/B for left and right)
+    gpio_init(LEFT_ENCODER_PIN_1);  gpio_set_dir(LEFT_ENCODER_PIN_1, GPIO_IN);  gpio_pull_up(LEFT_ENCODER_PIN_1);
+    gpio_init(LEFT_ENCODER_PIN_2);  gpio_set_dir(LEFT_ENCODER_PIN_2, GPIO_IN);  gpio_pull_up(LEFT_ENCODER_PIN_2);
+    gpio_init(RIGHT_ENCODER_PIN_1); gpio_set_dir(RIGHT_ENCODER_PIN_1, GPIO_IN); gpio_pull_up(RIGHT_ENCODER_PIN_1);
+    gpio_init(RIGHT_ENCODER_PIN_2); gpio_set_dir(RIGHT_ENCODER_PIN_2, GPIO_IN); gpio_pull_up(RIGHT_ENCODER_PIN_2);
 
     analogInit(LEFT_PWM_PIN, 200, 0);
     analogInit(RIGHT_PWM_PIN, 200, 0);
@@ -259,17 +264,20 @@ void compute_state_callback(TimerHandle_t timer) {
     // printf("\n Actual, Desired - Left: %ld, %d; -Right: %ld, %d", act_l_vel, LEFT_WHEEL_VEL, act_r_vel, RIGHT_WHEEL_VEL);
 
     //    printf("\n%ld %ld %ld %ld",100, DiffDriveState::getInstance()->GetLeftEncoderCount(), 100, DiffDriveState::getInstance()->GetRightEncoderCount() );
-    // printf("\n%ld Right: %ld",LEFT_PWM, DiffDriveState::getInstance()->GetRightEncoderCount());
-    // printf("\t %ld Left: %ld",RIGHT_PWM, DiffDriveState::getInstance()->GetLeftEncoderCount());
-    // printf("\t %d Right PWM", RIGHT_PWM);
-    // printf("\t %d Left PWM", LEFT_PWM);
+    printf("\n%ld Right: %ld",LEFT_PWM, DiffDriveState::getInstance()->GetRightEncoderCount());
+    printf("\t %ld Left: %ld",RIGHT_PWM, DiffDriveState::getInstance()->GetLeftEncoderCount());
     // printf("\n Right RPM act: %d, RPM des: %d,Adj: %.2f, PWM: %d", r_rpm, RIGHT_WHEEL_RPM, adjustment_r, RIGHT_PWM);
     // printf("\n Left RPM act: %d, RPM des: %d,Adj: %.2f, PWM: %d", l_rpm, LEFT_WHEEL_RPM, adjustment_l, LEFT_PWM);
-    // printf("\n Right RPM act: %d, RPM des: %d", r_rpm, RIGHT_WHEEL_RPM);
-    // printf("\n Left RPM act: %d, RPM des: %d", l_rpm, LEFT_WHEEL_RPM);
+    printf("\n Right RPM act: %d, RPM des: %d", r_rpm, RIGHT_WHEEL_RPM);
+    printf("\n Left RPM act: %d, RPM des: %d", l_rpm, LEFT_WHEEL_RPM);
     // printf("\n%ld %ld",DiffDriveState::getInstance()->GetLeftEncoderCount(), DiffDriveState::getInstance()->GetRightEncoderCount() );
     // printf("\t %d Left RPM", l_rpm);
 
+    // printf("\nEnc L=%ld dir=%d | Enc R=%ld dir=%d",
+    //    (long)DiffDriveState::getInstance()->GetLeftEncoderSigned(),
+    //    (int) DiffDriveState::getInstance()->GetLeftDir(),       // or LeftWheelDirection if you didn’t add getters
+    //    (long)DiffDriveState::getInstance()->GetRightEncoderSigned(),
+    //    (int) DiffDriveState::getInstance()->GetRightDir());
    
 }
 
@@ -309,13 +317,26 @@ int main() {
     stdio_init_all();
     init_gpio();
 
-    gpio_set_irq_enabled_with_callback (RIGHT_ENCODER_PIN_1, GPIO_IRQ_EDGE_FALL, true, [](uint gpio, uint32_t events){
-                DiffDriveState::getInstance()->IRQ_ENCODER(gpio, events);
-            });
+    // gpio_set_irq_enabled_with_callback (RIGHT_ENCODER_PIN_1, GPIO_IRQ_EDGE_FALL, true, [](uint gpio, uint32_t events){
+    //             DiffDriveState::getInstance()->IRQ_ENCODER(gpio, events);
+    //         });
 
-    gpio_set_irq_enabled_with_callback (LEFT_ENCODER_PIN_1,  GPIO_IRQ_EDGE_FALL, true, [](uint gpio, uint32_t events){
-                DiffDriveState::getInstance()->IRQ_ENCODER(gpio, events);
-            });
+    // gpio_set_irq_enabled_with_callback (LEFT_ENCODER_PIN_1,  GPIO_IRQ_EDGE_FALL, true, [](uint gpio, uint32_t events){
+    //             DiffDriveState::getInstance()->IRQ_ENCODER(gpio, events);
+    //         });
+
+    
+    // Seed previous AB states before enabling IRQs
+    DiffDriveState::getInstance()->InitEncoders();
+
+    // IRQ on BOTH edges for BOTH A/B pins (shared callback)
+    auto irq_cb = [](uint gpio, uint32_t events){
+        DiffDriveState::getInstance()->IRQ_ENCODER(gpio, events);
+    };
+    gpio_set_irq_enabled_with_callback(LEFT_ENCODER_PIN_1,  GPIO_IRQ_EDGE_RISE | GPIO_IRQ_EDGE_FALL, true, irq_cb);
+    gpio_set_irq_enabled              (LEFT_ENCODER_PIN_2,  GPIO_IRQ_EDGE_RISE | GPIO_IRQ_EDGE_FALL, true);
+    gpio_set_irq_enabled_with_callback(RIGHT_ENCODER_PIN_1, GPIO_IRQ_EDGE_RISE | GPIO_IRQ_EDGE_FALL, true, irq_cb);
+    gpio_set_irq_enabled              (RIGHT_ENCODER_PIN_2, GPIO_IRQ_EDGE_RISE | GPIO_IRQ_EDGE_FALL, true);
 
     //Main task that handles hw interface's read and write timers
     BaseType_t hw_interface_status = xTaskCreate(hw_interface_timer_scheduler, 
